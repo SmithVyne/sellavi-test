@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import Main from "./Main";
+import Nav from "./Nav";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// const firebaseConfig = {
+//     apiKey: "AIzaSyA5vCoDuVOnqRy_1riH1I_W_6-G-B97pfU",
+//     authDomain: "sellavi-9e675.firebaseapp.com",
+//     projectId: "sellavi-9e675",
+//     storageBucket: "sellavi-9e675.appspot.com",
+//     messagingSenderId: "159229693979",
+//     appId: "1:159229693979:web:ba4398a3f70d05ca7d68be"
+//   };
+
+export default function App() {
+    return (
+        <>
+            <Nav />
+            <Main />
+        </>
+    )
 }
-
-export default App;
