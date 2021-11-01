@@ -266,7 +266,7 @@ export default function Main() {
                     Консультация <br /> менеджера
                 </span>
             </div>
-            <Hits>
+            <Hits id="new">
                 <h2>Хиты продаж</h2>
                 <div className="hit-items">
                     {products.map(product => <Product key={JSON.stringify(product)} product={product} />)}

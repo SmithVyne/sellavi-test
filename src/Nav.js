@@ -104,8 +104,9 @@ const Step2 = styled.div`
             font-size: 25px;
             cursor: pointer;
         }
-        :last-child {
+        a:last-child {
             position: relative;
+            color: #000;
             .cart-count {
                 color: #fff;
                 font-family: Roboto;
@@ -164,7 +165,6 @@ const Step3 = styled.div`
 
 export default function Nav() {
     const {cart} = useContext(GlobalContext);
-    console.log(cart)
     
     return (
         <Wrapper>
@@ -174,10 +174,10 @@ export default function Nav() {
                 <Link to="/">Доставка и самовывоз</Link>
                 <Link to="/">Пункт выдачи</Link>
                 <Link to="/">Оплата и возврат</Link>
-                <BsPerson />
+                <Link to="/user"><BsPerson /></Link>
             </Step1>
             <Step2>
-                <img alt="logo" src={logo} />
+                <Link to="/"><img alt="logo" src={logo} /></Link>
                 <div className="search">
                     <input type="text" placeholder="Поиск по сайту..." />
                     <button>Найти</button>
@@ -189,7 +189,7 @@ export default function Nav() {
                 <div className="shop-utils">
                     <IoDocumentOutline />
                     <BsHeart />
-                    <span><span className="cart-count">{_.size(cart)}</span><BsBag /></span>
+                    <Link to="/cart"><span className="cart-count">{_.size(cart)}</span><BsBag /></Link>
                 </div>
             </Step2>
             <Step3>
