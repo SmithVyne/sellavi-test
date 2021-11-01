@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {GiHamburgerMenu} from "react-icons/gi";
 import {IoDocumentOutline} from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import {BsBag, BsHeart, BsPerson} from "react-icons/bs";
 import styled from 'styled-components';
 import logo from "./assets/logo.svg";
+import { GlobalContext } from './App';
+import _ from 'lodash';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -161,6 +163,9 @@ const Step3 = styled.div`
 `
 
 export default function Nav() {
+    const {cart} = useContext(GlobalContext);
+    console.log(cart)
+    
     return (
         <Wrapper>
             <Step1>
@@ -184,7 +189,7 @@ export default function Nav() {
                 <div className="shop-utils">
                     <IoDocumentOutline />
                     <BsHeart />
-                    <span><span className="cart-count">5</span><BsBag /></span>
+                    <span><span className="cart-count">{_.size(cart)}</span><BsBag /></span>
                 </div>
             </Step2>
             <Step3>

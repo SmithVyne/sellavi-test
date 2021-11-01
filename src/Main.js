@@ -177,7 +177,7 @@ const Feedback = styled(Categories)`
             gap: 45px;
             align-items: center;
             width: max-content;
-            padding: 0 5px;
+            padding: 5px;
             .feedback {
                 box-shadow: 2px 3px 9px 0px #83838542;
                 width: 350px;
@@ -223,9 +223,9 @@ export default function Main() {
     const handleScroll = (direction="left") => {
         const {current} = feedbackRef;
         if(direction === "right") {
-            current.scroll({left: 395, top:0, behaviour: "smooth"})
+            current.scroll({left: 395, behaviour: "smooth"})
         } else {
-            current.scroll({left: -395, top:0, behaviour: "smooth"})
+            current.scroll({left: -395, behaviour: "smooth"})
         }
     }
     
@@ -269,7 +269,7 @@ export default function Main() {
             <Hits>
                 <h2>Хиты продаж</h2>
                 <div className="hit-items">
-                    {products.map(product => <Product product={product} />)}
+                    {products.map(product => <Product key={JSON.stringify(product)} product={product} />)}
                 </div>
             </Hits>
             <Categories>
@@ -294,39 +294,39 @@ export default function Main() {
                 </div>
             </Categories>
             <Feedback>
-                <img onClick={()=>handleScroll()} className="scroller leftScroll" src={scrollArrow} />
-                <img onClick={()=>handleScroll("right")} className="scroller rightScroll" src={scrollArrow} />
+                <img alt="scroller" onClick={()=>handleScroll()} className="scroller leftScroll" src={scrollArrow} />
+                <img alt="scroller" onClick={()=>handleScroll("right")} className="scroller rightScroll" src={scrollArrow} />
                 <h2>Отзывы</h2>
                 <div ref={feedbackRef} className="scrollWrapper">
                 <div className="feedbacks">
                     <div className="feedback">
-                        <img alt="feedback-image" src={feedbackBathroom} />
+                        <img alt="feedback" src={feedbackBathroom} />
                         <span className="customer-name">Снежана</span>
                         <span className="customer-city">Москва</span>
                         <span className="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
                     </div>
 
                     <div className="feedback">
-                        <img alt="feedback-image" src={feedbackKitchen} />
-                        <span className="customer-name">Снежана</span>
-                        <span className="customer-city">Москва</span>
+                        <img alt="feedback" src={feedbackKitchen} />
+                        <span className="customer-name">Инна Васильева</span>
+                        <span className="customer-city">Екатеринбург</span>
                         <span className="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
                     </div>
 
                     <div className="feedback">
-                        <img alt="feedback-image" src={feedbackLivingRoom} />
-                        <span className="customer-name">Снежана</span>
-                        <span className="customer-city">Москва</span>
+                        <img alt="feedback" src={feedbackLivingRoom} />
+                        <span className="customer-name">Андрей Семенов</span>
+                        <span className="customer-city">Санкт - Петербург</span>
                         <span className="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
                     </div>
 
                     <div className="feedback">
-                        <img alt="feedback-image" src={feedbackBathroom} />
-                        <span className="customer-name">Снежана</span>
-                        <span className="customer-city">Москва</span>
+                        <img alt="feedback" src={feedbackBathroom} />
+                        <span className="customer-name">Инна</span>
+                        <span className="customer-city">Екатеринбург</span>
                         <span className="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
                     </div>
-                    </div>
+                </div>
                 </div>
             </Feedback>
             </section>
