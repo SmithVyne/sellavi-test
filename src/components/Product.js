@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { AiFillStar } from 'react-icons/ai';
 import styled from 'styled-components';
-import { GlobalContext } from '../App';
+import { GlobalContext } from '../components/App';
 
 const Wrapper = styled.div`
     display: flex;

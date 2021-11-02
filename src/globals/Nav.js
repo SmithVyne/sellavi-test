@@ -4,8 +4,8 @@ import {IoDocumentOutline} from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import {BsBag, BsHeart, BsPerson} from "react-icons/bs";
 import styled from 'styled-components';
-import logo from "./assets/logo.svg";
-import { GlobalContext } from './App';
+import logo from "../assets/logo.svg";
+import { GlobalContext } from '../components/App';
 import _ from 'lodash';
 
 const Wrapper = styled.div`
