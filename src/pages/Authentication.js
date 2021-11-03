@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth"
-import { auth } from '../globals/firebase';
-import { Redirect } from 'react-router';
+import { auth, firestore } from '../globals/firebase';
+import { doc, setDoc } from '@firebase/firestore';
 
 const Wrapper = styled.div`
     width: 500px;
@@ -60,6 +60,10 @@ const Wrapper = styled.div`
             height: 41px;
             display: flex;
             align-items: center;
+            :disabled {
+                cursor: not-allowed;
+                background: darkred;
+            }
         }
         .changeState {
             text-decoration: underline;
@@ -68,12 +72,13 @@ const Wrapper = styled.div`
     }
 `
 
+const AccountTypes = ["Merchant", "Employee"];
+
 export default function Authentication() {
-    const [selected, setSelected] = useState(0);
+    const [type, setType] = useState(AccountTypes[0].toLowerCase());
     const [state, setState] = useState("login");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [redirect, setRedirect] = useState(false);
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
@@ -84,17 +89,20 @@ export default function Authentication() {
         setError("")
         if(state === "login") {
             signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-                .then(() => setRedirect(true))
-                .catch(() => setError("Invalid username or password"))
-                .finally(() => setLoading(false))
-        } else {
+                .catch(() => {setError("Invalid username or password"); setLoading(false)})
+        } 
+        else if(state === "signup") {
             if(passwordRef.current.value !== confirmPasswordRef.current.value) {
                 return setError("Passwords do not match")
             }
+            
             createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-                .then(() => setRedirect(true))
-                .catch(() => setError("Failed to create account"))
-                .finally(() => setLoading(false))
+                .then(({user}) => {
+                    setDoc(doc(firestore, 'users/'+user.uid), {
+                        type
+                    })
+                })
+                .catch(() => {setError("Failed to create user"); setLoading(false)})
         }
     }
 
@@ -104,10 +112,9 @@ export default function Authentication() {
 
     return (
         <Wrapper>
-            {redirect && <Redirect to="/" />}
             <div className="options">
-                {["Merchant", "Employee"].map((item, index) => 
-                    <span key={item} onClick={()=>setSelected(index)} className={`${index === selected ? "selected" : ""}`}>{item} {state}</span>)
+                {AccountTypes.map(item => 
+                    <span key={item} onClick={()=>setType(item.toLowerCase())} className={`${item.toLowerCase() === type ? "selected" : ""}`}>{item} {state}</span>)
                 }
             </div>
             <form onSubmit={handleSubmit}>

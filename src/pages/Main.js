@@ -211,7 +211,7 @@ const Feedback = styled(Categories)`
     }
 `
 
-const products = [
+export const products = [
     {image: tap1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", rating: [4.9, 15]},
     {image: sink1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", rating: [5.0, 15], newProd: true},
     {image: tap1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", },
