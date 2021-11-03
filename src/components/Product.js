@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import React, { useContext, useState, useEffect, useCallback } from 'react'
+import { BsCheck, BsHeart, BsHeartFill } from 'react-icons/bs';
 import { AiFillStar } from 'react-icons/ai';
+import { MdOutlineCancel } from 'react-icons/md';
 import styled from 'styled-components';
 import { GlobalContext } from '../components/App';
 
@@ -11,7 +12,7 @@ const Wrapper = styled.div`
     gap: 12px;
     .product-image {
         position: relative;
-        .favorite {
+        .favorite, .cart-property {
             position: absolute;
             bottom: 14px;
             right: 14px;
@@ -24,6 +25,11 @@ const Wrapper = styled.div`
             align-items: center;
             border-radius: 100%;
             cursor: pointer;
+        }
+        .cart-property {
+            left: 14px;
+            font-size: 30px;
+            color: #E31E24;
         }
     }
     button {
@@ -78,7 +84,7 @@ const QualityControl = styled.span`
     }
 `
 
-export default function Product({product}) {
+export default function Product({product, cart=false}) {
     const {sale, newProd, image, price, desc, rating} = product;
     const stars = rating && Math.floor(rating[0]);
     const [liked, setLiked] = useState(false);
@@ -89,16 +95,20 @@ export default function Product({product}) {
         setQuantity(1);
         updateCart(cart => ({...cart, [JSON.stringify(product)] : {...product, quantity: 1} }))
     }
+
+    const deleteItemFromCart = useCallback(() => {
+        updateCart(cart => {
+            delete cart[JSON.stringify(product)]
+            return {...cart};
+        })
+    }, [updateCart, product])
     
     useEffect(() => {
         quantity ?
             updateCart(cart => ({...cart, [JSON.stringify(product)] : {...product, quantity} }))
             :
-            updateCart(cart => {
-                delete cart[JSON.stringify(product)]
-                return {...cart};
-            }) 
-    }, [quantity, updateCart, product])
+            deleteItemFromCart()
+    }, [quantity, updateCart, product, deleteItemFromCart])
     
     return (
         <Wrapper>
@@ -107,9 +117,10 @@ export default function Product({product}) {
                 {newProd && <Info>NEW</Info>}
                 <img alt="product" src={image} />
                 <span className="favorite" onClick={() => setLiked(val => !val)}>{liked ? <BsHeartFill color="#E31E24" /> : <BsHeart color="#E31E24" />}</span>
+                { <span onClick={deleteItemFromCart} className="cart-property"><MdOutlineCancel /></span>}
             </div>
             <span>{desc}</span>
-            <span>{price}</span>
+            <span>{price} p.</span>
             { stars && 
                 <span className="stars">
                     <span>{Array(5).fill(5).map((_, id) => <AiFillStar key={id} color={id + 1 <= stars ? "#E31E24" : "#A3A4A5" } />)}</span>

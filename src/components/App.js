@@ -41,7 +41,8 @@ export default function App() {
         return unsubscribe
     }, [])
 
-    // console.log(currentUser)
+    // currentUser && loginFunc(currentUser)
+    // console.log(cart, "App")
 
     return (
         <UserContext.Provider value={currentUser}>
