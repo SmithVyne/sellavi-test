@@ -113,7 +113,7 @@ export default function Authentication() {
     return (
         <Wrapper>
             <div className="options">
-                {AccountTypes.map(item => 
+                {state === "signup" && AccountTypes.map(item => 
                     <span key={item} onClick={()=>setType(item.toLowerCase())} className={`${item.toLowerCase() === type ? "selected" : ""}`}>{item} {state}</span>)
                 }
             </div>

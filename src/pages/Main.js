@@ -223,9 +223,9 @@ export default function Main() {
     const handleScroll = (direction="left") => {
         const {current} = feedbackRef;
         if(direction === "right") {
-            current.scroll({left: 395, behaviour: "smooth"})
+            current.scrollBy({left: 395, behaviour: "smooth"})
         } else {
-            current.scroll({left: -395, behaviour: "smooth"})
+            current.scrollBy({left: -395, behaviour: "smooth"})
         }
     }
     

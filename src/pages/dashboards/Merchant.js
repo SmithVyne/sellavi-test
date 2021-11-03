@@ -1,5 +1,7 @@
-import React from 'react'
+import { addDoc, collection } from '@firebase/firestore';
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { firestore } from '../../globals/firebase';
 
 const Wrapper = styled.div`
     form {
@@ -45,27 +47,28 @@ const Wrapper = styled.div`
 `
 
 export default function Merchant() {
+    const [desc, setDesc] = useState("")
+    const [price, setPrice] = useState(0);
+    const [imageUrl, setImageUrl] = useState("");
     
-    const handleSubmitProduct = () => {
-
+    const handleSubmitProduct = (e) => {
+        e.preventDefault();
+        const collectionRef = collection(firestore, "products")
+        addDoc(collectionRef, {desc, price}).then(docId => console.log(docId))
     }
     
     return (
         <Wrapper>
-            <h1>Merchant Dashboard</h1>
+            
             <form onSubmit={handleSubmitProduct}>
                 <span>New Product</span>
                 <div className="field">
                     <label>Description</label>
-                    <input type="text" />
-                </div>
-                <div className="field">
-                    <label>Description</label>
-                    <input type="text" />
+                    <input required type="text" value={desc} onChange={({target:{value}})=>setDesc(value)} />
                 </div>
                 <div className="field">
                     <label>Price</label>
-                    <input type="number" />
+                    <input required type="number" val={price} onChange={({target:{value}})=>setPrice(value)} />
                 </div>
                 <div className="field">
                     <label>Image</label>
