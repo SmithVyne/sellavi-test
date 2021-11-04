@@ -212,6 +212,11 @@ const MobileNav = styled.div`
                 justify-content: center;
             }
         }
+        svg.user {
+            color: #000;
+            font-size: 25px;
+            cursor: pointer;
+        }
     }
 `
 
@@ -261,6 +266,7 @@ export default function Nav() {
             <MobileNav>
                 <GiHamburgerMenu className="burgerMenu" />
                 <Link className="logo" to="/"><img alt="logo" src={logo} /></Link>
+                <Link to="/user"><BsPerson className="user" /></Link>
                 <Link to="/cart"><span className="cart-count">{_.size(cart)}</span><BsBag /></Link>
             </MobileNav>
         </>
