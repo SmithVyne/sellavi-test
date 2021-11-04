@@ -41,6 +41,7 @@ export default function App() {
         const unsubscribeProducts = onSnapshot(productsQuery, snapshot => {
             setProducts(snapshot.docs.map(snap => ({...snap.data(), id:snap.id})))
         })
+        
         return () => {
             unsubscribeAuth();
             unsubscribeProducts();

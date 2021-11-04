@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from '@firebase/firestore'
+import { collection, onSnapshot, query } from '@firebase/firestore'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -41,8 +41,8 @@ export default function Employee() {
 
     useEffect(() => {
         const ordersQuery = query(collection(firestore, "orders"))
-        getDocs(ordersQuery)
-        .then(snapshot => setOrders(snapshot.docs.map(snap => ({...snap.data(), id: snap.id}) )))
+        const unsubscribeOrders = onSnapshot(ordersQuery, snapshot => setOrders(snapshot.docs.map(snap => ({...snap.data(), id: snap.id}) )))
+        return unsubscribeOrders
     }, [])
     
     return (
