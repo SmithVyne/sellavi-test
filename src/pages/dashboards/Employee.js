@@ -14,6 +14,9 @@ const Order = styled.div`
         background: #2B2A29;
         color: #fff;
         padding: 20px 25px;
+        &>div {
+            margin-bottom: 7px;
+        }
     }
     .products {
         padding: 10px;
@@ -52,6 +55,7 @@ export default function Employee() {
                     <div className="title">
                         <div>Customer Name: {order.customerName}</div>
                         <div>Phone number: {order.contactNumber}</div>
+                        <div>Total price: {order.totalPrice} p.</div>
                     </div>
                     <div className="products">
                         {order.products.map(product => <Product key={product.id} product={product} dashboard={true} />)}
