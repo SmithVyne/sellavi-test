@@ -11,7 +11,7 @@ import { Redirect } from 'react-router';
 
 const Wrapper = styled.div`
     position: relative;
-    margin-top: 50px;
+    margin: 50px 0;
     .products {
         display: grid;
         grid-gap: 50px 45px;
