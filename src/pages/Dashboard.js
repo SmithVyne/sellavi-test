@@ -7,9 +7,14 @@ import Employee from './dashboards/Employee'
 import Merchant from './dashboards/Merchant'
 
 const Wrapper = styled.div`
+    user-select: none;
     width: 100%;
     section.body {
+        width: 100%;
         padding: 0 390px;
+        @media(max-width: 1700px) {
+            padding: 0 5vw;
+        }
     }
     .accountInfo {
         width: 100%;

@@ -94,12 +94,12 @@ const QuantityControl = styled.span`
     }
 `
 
-export default memo(function Product({product, index, isCart=false}) {
+export default memo(function Product({product, isCart=false, dashboard=false}) {
     const {sale, newProd, imageRef, price, desc, rating} = product;
     const stars = rating && Math.floor(rating.stars);
     const [liked, setLiked] = useState(false);
     const {updateCart} = useContext(GlobalContext);
-    const [quantity, setQuantity] = useState(isCart ? product.quantity: 0);
+    const [quantity, setQuantity] = useState(isCart || dashboard ? product.quantity: 0);
     const [image, setImage] = useState("");
 
     useEffect(() => {
@@ -108,21 +108,21 @@ export default memo(function Product({product, index, isCart=false}) {
     }, [imageRef])
 
     const deleteItemFromCart = useCallback(() => {
-        updateCart(cart => cart.filter(item => item.id !== product.id))
+        updateCart(cart => {
+            delete cart[product.id]
+            return {...cart}
+        })
     }, [product.id, updateCart])
 
     const previousQuantity = usePrevious(quantity);
     
     useEffect(() => {
         if (quantity >= 1 && quantity !== previousQuantity){
-            updateCart(cart => {
-                cart[index] = {...product, quantity}
-                return [...cart]
-            })
+            updateCart(cart => ({...cart, [product.id]: {...product, quantity} }))
         } else if(quantity === 0 && quantity !== previousQuantity && isCart) {
             deleteItemFromCart()
         }
-    }, [quantity, updateCart, index, product, previousQuantity, isCart, deleteItemFromCart])
+    }, [quantity, updateCart, product, previousQuantity, isCart, deleteItemFromCart])
     
     return (
         <Wrapper image={image ? image : "https://via.placeholder.com/200x200.png/fff?text=placeholder"}>
@@ -139,11 +139,12 @@ export default memo(function Product({product, index, isCart=false}) {
                     <span>{rating.stars} ({rating.count})</span>
                 </span>}
             {quantity >= 1 ? 
+                dashboard || 
                 <QuantityControl>
                     <span onClick={()=>setQuantity(q => q-1)} className="controls">-</span>
                     {quantity}
                     <span onClick={()=>setQuantity(q => q+1)} className="controls">+</span>
-                </QuantityControl> : 
+                </QuantityControl> : dashboard ||
                 <button onClick={() => setQuantity(1)}>КУПИТЬ</button>}
         </Wrapper>
     )

@@ -135,7 +135,7 @@ export default function Merchant() {
         setLoading(-2);
         e.preventDefault();
         const collectionRef = collection(firestore, "products")
-        addDoc(collectionRef, product).then(docId => console.log(docId))
+        addDoc(collectionRef, product)
         .finally(() => setLoading(2))
     }
 
@@ -166,7 +166,7 @@ export default function Merchant() {
                             <small className="weighted" >Weighted <input checked={product.weighted} type="radio" onClick={() => updateProduct(prod => (
                                 {...prod, weighted : !prod.weighted }))} /></small>
                         </label>
-                        <input placeholder={product.weighted ? "$ per KG" : "$"} className="price" required type="number" val={product.price} onChange={({target:{value}})=>updateProduct(val => ({...val, price: +value}))} />
+                        <input placeholder={product.weighted ? "rub per KG" : "rub"} className="price" required type="number" val={product.price} onChange={({target:{value}})=>updateProduct(val => ({...val, price: +value}))} />
                     </div>
                     <div className="field file">
                         <label onClick={() => fileRef.current.click()}>
@@ -174,12 +174,12 @@ export default function Merchant() {
                             {loading === -1 && <Loader />}
                             {loading === 1 && <BsCheck color="#28a745" />}
                         </label>
-                        <input ref={fileRef} type="file" onChange={handleFileChange} />
+                        <input ref={fileRef} type="file" onChange={handleFileChange} accept="image/*" />
                     </div>
                     <div className="field">
                         <label>Add rating</label>
                         <div className="options">
-                            <input max={5} type="number" placeholder="average" onChange={({target: {value}}) => updateProduct(prod => (
+                            <input min={0} max={5} type="number" placeholder="average" onChange={({target: {value}}) => updateProduct(prod => (
                                 {...prod, rating: {...prod?.rating, stars: +value} }
                             ))} />
                             <input type="number" placeholder="total reviews" onChange={({target: {value}}) => updateProduct(prod => (

@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import Main from "../pages/Main";
 import Nav from "../globals/Nav";
-import smoothscroll from 'smoothscroll-polyfill';
 import { Route, Switch } from "react-router";
 import Authentication from "../pages/Authentication";
 import { auth, firestore } from "../globals/firebase";
@@ -9,18 +8,13 @@ import {onAuthStateChanged} from "firebase/auth"
 import Dashboard from "../pages/Dashboard";
 import { collection, doc, getDoc, onSnapshot, query } from "@firebase/firestore";
 import Cart from "../pages/Cart";
-import { useLocalStorage } from "../hooks";
-
-smoothscroll.polyfill();
 
 
 export const GlobalContext = createContext();
 export const UserContext = createContext();
 
-localStorage.setItem("cart", JSON.stringify({}));
 export default function App() {
-    // const [cart, updateCart] = useLocalStorage("cart");
-    const [cart, updateCart] = useState([]);
+    const [cart, updateCart] = useState({});
     const [currentUser, setCurrentUser] = useState();
     const [userType, setUserType] = useState("");
     const [products, setProducts] = useState([]);

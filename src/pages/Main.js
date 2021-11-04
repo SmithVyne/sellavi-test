@@ -19,17 +19,31 @@ import feedbackKitchen from "../assets/feedback/kitchen.png";
 import feedbackLivingRoom from "../assets/feedback/living-room.png";
 import scrollArrow from "../assets/arrow.svg";
 import { GlobalContext } from '../components/App';
+import smoothscroll from 'smoothscroll-polyfill';
+import sellaviLogo from "../assets/footer/sellavi-logo.png";
+import mastercard from "../assets/footer/mastercard.png";
+import visa from "../assets/footer/visa.png";
+import мир from "../assets/footer/мир.png";
+import ssl from "../assets/footer/ssl.png";
+import pci from "../assets/footer/pci.png";
+import brand1 from "../assets/brands/image1.png";
+import brand2 from "../assets/brands/image2.png";
+import brand3 from "../assets/brands/image3.png";
+import brand4 from "../assets/brands/image4.png";
 
-
+// window.__forceSmoothScrollPolyfill__ = true;
 const Wrapper = styled.main`
-    width: 100%;
+    width: 100vw;
     height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
-    .body {
+    section.body {
         width: 100%;
         padding: 0 390px;
+        @media(max-width: 1700px) {
+            padding: 0 5vw;
+        }
     }
     .features {
         font-size: 17px;
@@ -68,6 +82,13 @@ const Banner = styled.section`
         justify-content: space-between;
         img {
             width: 40%;
+            @media(max-width: 720px) {
+                width: 100%;
+                margin-top: 300px;
+                &.right {
+                    display: none;
+                }
+            }
         }
     }
     .foreground {
@@ -80,6 +101,13 @@ const Banner = styled.section`
         width: 40%;
         background: radial-gradient(circle, rgba(254,254,252,1) 0%, rgba(255,255,255,1) 75%, rgba(254,254,254,0.7) 86%, rgba(255,255,255,0) 100%);
         border: none;
+        @media(max-width: 720px) {
+            width: 100%;
+            height: 300px;
+            top: 0;
+            box-shadow: 0 0 60px 50px #fff;
+            background: linear-gradient(268.69deg, #FEFEFC 1.12%, #FFFFFF 14.83%, #FEFEFE 84.17%, rgba(255, 255, 255, 0.86) 98.93%);
+        }
         .text {
             display: flex;
             flex-direction: column;
@@ -94,14 +122,49 @@ const Banner = styled.section`
             .sub-title {
                 font-size: 48px;
                 line-height: 58px;
+                @media(max-width: 1500px) {
+                    font-size: 3vw;
+                    line-height: 100%;
+                    img {
+                        width: 11vw;
+                    }
+                }
+                @media(max-width: 720px) {
+                    font-size: 7vw;
+                    line-height: 100%;
+                    img {
+                        width: 25vw;
+                    }
+                }
+            }
+            @media(max-width: 1500px) {
+                font-size: 4vw;
+                line-height: 100%;
+            } 
+            @media(max-width: 720px) {
+                font-size: 9vw;
+                line-height: 100%;
             }
         }
         img.embroidery1 {
             margin-bottom: 20px;
+            @media(max-width: 1500px) {
+                width: 15vw;
+            }
+            @media(max-width: 720px) {
+                width: 20vw;
+            }
         }
 
         img.embroidery2 {
             margin-top: 47px;
+            @media(max-width: 1500px) {
+                width: 10vw;
+                margin-top: 30px;
+            }
+            @media(max-width: 720px) {
+                width: 15vw;
+            }
         }
     }
 `
@@ -110,6 +173,7 @@ const Hits = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     h2 {
         font-size: 28px;
         font-weight: 600;
@@ -120,18 +184,42 @@ const Hits = styled.section`
         display: grid;
         grid-gap: 50px 45px;
         grid-template-columns: repeat(4, 1fr);
+        @media(max-width: 1240px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @media(max-width: 720px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media(max-width: 400px) {
+            grid-template-columns:1fr;
+        }
     }
 `
 
-const Categories = styled(Hits)`
-    margin-top: 100px;
+const Categories = styled.section`
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 71px;
+    h2 {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 34px;
+        margin: 0 0 30px;
+    }
     .categories {
         display: grid;
         grid-gap: 20px;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 50% 50%;
+        @media(max-width: 1180px) {
+            grid-template-columns: 100%;
+        }
         .category {
             position: relative;
+            img {
+                width: 100%;
+            }
             button {
                 position: absolute;
                 width: 158px;
@@ -161,16 +249,25 @@ const Feedback = styled(Categories)`
     }
     img.leftScroll {
         top: 50%;
-        left: -55px;
+        left: -40px;
+        @media(max-width: 720px) {
+            left: -15px;
+        }
     }
     img.rightScroll {
         top: 50%;
-        right: -55px;
+        right: -40px;
         transform: rotate(180deg);
+        @media(max-width: 720px) {
+            right: -15px;
+        }
     }
     .scrollWrapper {
         width: 100%;
-        overflow-x: hidden;
+        overflow-x: scroll;
+        ::-webkit-scrollbar{
+            width: 0px;
+        }
         .feedbacks {
             display: flex;
             gap: 45px;
@@ -180,6 +277,7 @@ const Feedback = styled(Categories)`
             .feedback {
                 box-shadow: 2px 3px 9px 0px #83838542;
                 width: 350px;
+                max-width: 88vw;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
@@ -210,15 +308,71 @@ const Feedback = styled(Categories)`
     }
 `
 
+const Brands = styled(Feedback)`
+    .allBrands {
+        display: flex;
+        gap: 29px;
+        align-items: center;
+        width: max-content;
+        padding: 0 20px;
+        .brand {
+            box-shadow: 2px 3px 9px 0px #83838542;
+            width: 253px;
+            height: 253px;
+            max-width: 88vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img {
+                width: 80%
+            }
+        }
+    }
+`
+
+const Footer = styled.footer`
+    background: #fff;
+    padding: 40px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        width: fit-content;
+    }
+    .right {
+        width: fit-content;
+    }
+    @media(max-width: 800px) {
+        flex-direction: column-reverse;
+        .left {
+            img {
+                width: 15vw;
+            }
+        }
+        .right {
+            img {
+                width: 28vw;
+            }
+        }
+    }
+`
+
+smoothscroll.polyfill();
 export default memo(function Main() {
     const {products} = useContext(GlobalContext);   
     const feedbackRef = useRef();
+    const brandsRef = useRef()
     const handleScroll = (direction="left") => {
         const {current} = feedbackRef;
+        const offset = 0.88 * window.innerWidth + 45;
         if(direction === "right") {
-            current.scrollBy({left: 395, behaviour: "smooth"})
+            current.scrollBy({left: offset, behaviour: "smooth"})
         } else {
-            current.scrollBy({left: -395, behaviour: "smooth"})
+            current.scrollBy({left: -offset, behaviour: "smooth"})
         }
     }
     
@@ -227,7 +381,7 @@ export default memo(function Main() {
             <Banner>
                 <div className="background">
                     <img alt="bathroom" src={bathroom} />
-                    <img alt="bathroom2" src={bathroom2} />
+                    <img className="right" alt="bathroom2" src={bathroom2} />
                 </div>
                 <div className="foreground">
                     <img className="embroidery1" alt="embroidery1" src={embroidery1} />
@@ -322,6 +476,37 @@ export default memo(function Main() {
                 </div>
                 </div>
             </Feedback>
+            <Brands id="brands">
+                <img alt="scroller" onClick={()=>handleScroll()} className="scroller leftScroll" src={scrollArrow} />
+                <img alt="scroller" onClick={()=>handleScroll("right")} className="scroller rightScroll" src={scrollArrow} />
+                <h2>Бренды</h2>
+                <div ref={brandsRef} className="scrollWrapper">
+                    <div className="allBrands">
+                        <div className="brand">
+                            <img alt="brand1" src={brand1} />
+                        </div>
+                        <div className="brand">
+                            <img alt="bran2" src={brand2} />
+                        </div>
+                        <div className="brand">
+                            <img alt="brand3" src={brand3} />
+                        </div>
+                        <div className="brand">
+                            <img alt="brand4" src={brand4} />
+                        </div>
+                    </div>
+                </div>
+            </Brands>
+            <Footer>
+                <div className="left">
+                    <img alt="mastercard" src={mastercard} />
+                    <img alt="visa" src={visa} />
+                    <img alt="мир" src={мир} />
+                    <img alt="ssl" src={ssl} />
+                    <img alt="pci" src={pci} />
+                </div>
+                <div className="right"><img alt="sellavi-logo" src={sellaviLogo} /></div>
+            </Footer>
             </section>
         </Wrapper>
     )

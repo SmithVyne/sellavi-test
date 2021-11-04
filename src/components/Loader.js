@@ -76,7 +76,7 @@ const Wrapper = styled.div`
 export default function Loader() {
     return (
         <Wrapper>
-            <div class="loader">Loading...</div>
+            <div className="loader">Loading...</div>
         </Wrapper>
     )
 }
