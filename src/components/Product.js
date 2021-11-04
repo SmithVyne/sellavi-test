@@ -1,9 +1,12 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
-import { BsCheck, BsHeart, BsHeartFill } from 'react-icons/bs';
+import React, { useContext, useState, useEffect, useCallback, memo } from 'react'
+import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { AiFillStar } from 'react-icons/ai';
 import { MdOutlineCancel } from 'react-icons/md';
 import styled from 'styled-components';
 import { GlobalContext } from '../components/App';
+import { getDownloadURL, ref } from '@firebase/storage';
+import { storage } from '../globals/firebase';
+import { usePrevious } from '../hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -12,6 +15,10 @@ const Wrapper = styled.div`
     gap: 12px;
     .product-image {
         position: relative;
+        width: 100%;
+        height: 200px;
+        background: url(${({image}) => image}) no-repeat 50% 50%;
+        background-size: cover;
         .favorite, .cart-property {
             position: absolute;
             bottom: 14px;
@@ -25,6 +32,7 @@ const Wrapper = styled.div`
             align-items: center;
             border-radius: 100%;
             cursor: pointer;
+            background: #fff;
         }
         .cart-property {
             left: 14px;
@@ -33,6 +41,7 @@ const Wrapper = styled.div`
         }
     }
     button {
+        min-width: 200px;
         width: 100%;
         display: flex;
         align-items: center;
@@ -66,7 +75,8 @@ const Info = styled.span`
     color: #fff;
 `
 
-const QualityControl = styled.span`
+const QuantityControl = styled.span`
+    min-width: 200px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -84,53 +94,57 @@ const QualityControl = styled.span`
     }
 `
 
-export default function Product({product, cart=false}) {
-    const {sale, newProd, image, price, desc, rating} = product;
-    const stars = rating && Math.floor(rating[0]);
+export default memo(function Product({product, index, isCart=false}) {
+    const {sale, newProd, imageRef, price, desc, rating} = product;
+    const stars = rating && Math.floor(rating.stars);
     const [liked, setLiked] = useState(false);
     const {updateCart} = useContext(GlobalContext);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(isCart ? product.quantity: 0);
+    const [image, setImage] = useState("");
 
-    const handleClick = () => {
-        setQuantity(1);
-        updateCart(cart => ({...cart, [JSON.stringify(product)] : {...product, quantity: 1} }))
-    }
+    useEffect(() => {
+        getDownloadURL(ref(storage, imageRef))
+        .then(url => setImage(url));
+    }, [imageRef])
 
     const deleteItemFromCart = useCallback(() => {
-        updateCart(cart => {
-            delete cart[JSON.stringify(product)]
-            return {...cart};
-        })
-    }, [updateCart, product])
+        updateCart(cart => cart.filter(item => item.id !== product.id))
+    }, [product.id, updateCart])
+
+    const previousQuantity = usePrevious(quantity);
     
     useEffect(() => {
-        quantity ?
-            updateCart(cart => ({...cart, [JSON.stringify(product)] : {...product, quantity} }))
-            :
+        if (quantity >= 1 && quantity !== previousQuantity){
+            updateCart(cart => {
+                cart[index] = {...product, quantity}
+                return [...cart]
+            })
+        } else if(quantity === 0 && quantity !== previousQuantity && isCart) {
             deleteItemFromCart()
-    }, [quantity, updateCart, product, deleteItemFromCart])
+        }
+    }, [quantity, updateCart, index, product, previousQuantity, isCart, deleteItemFromCart])
     
     return (
-        <Wrapper>
+        <Wrapper image={image ? image : "https://via.placeholder.com/200x200.png/fff?text=placeholder"}>
             <div className="product-image">
-                {sale && <Info>SALE</Info>}
-                {newProd && <Info>NEW</Info>}
-                <img alt="product" src={image} />
+                {sale ? <Info>SALE</Info> : newProd ? <Info>NEW</Info> : null}
                 <span className="favorite" onClick={() => setLiked(val => !val)}>{liked ? <BsHeartFill color="#E31E24" /> : <BsHeart color="#E31E24" />}</span>
-                { <span onClick={deleteItemFromCart} className="cart-property"><MdOutlineCancel /></span>}
+                {isCart && <span onClick={deleteItemFromCart} className="cart-property"><MdOutlineCancel /></span>}
             </div>
             <span>{desc}</span>
-            <span>{price} p.</span>
+            <span>{quantity ? price * quantity : price} p.</span>
             { stars && 
                 <span className="stars">
                     <span>{Array(5).fill(5).map((_, id) => <AiFillStar key={id} color={id + 1 <= stars ? "#E31E24" : "#A3A4A5" } />)}</span>
-                    <span>{rating[0]} ({rating[1]})</span>
+                    <span>{rating.stars} ({rating.count})</span>
                 </span>}
-            {quantity ? <QualityControl>
-                <span onClick={()=>setQuantity(q => q-1)} className="controls">-</span>
-                {quantity}
-                <span onClick={()=>setQuantity(q => q+1)} className="controls">+</span>
-            </QualityControl> : <button onClick={handleClick}>КУПИТЬ</button>}
+            {quantity >= 1 ? 
+                <QuantityControl>
+                    <span onClick={()=>setQuantity(q => q-1)} className="controls">-</span>
+                    {quantity}
+                    <span onClick={()=>setQuantity(q => q+1)} className="controls">+</span>
+                </QuantityControl> : 
+                <button onClick={() => setQuantity(1)}>КУПИТЬ</button>}
         </Wrapper>
     )
-}
+})

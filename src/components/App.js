@@ -7,8 +7,9 @@ import Authentication from "../pages/Authentication";
 import { auth, firestore } from "../globals/firebase";
 import {onAuthStateChanged} from "firebase/auth"
 import Dashboard from "../pages/Dashboard";
-import { doc, getDoc } from "@firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, query } from "@firebase/firestore";
 import Cart from "../pages/Cart";
+import { useLocalStorage } from "../hooks";
 
 smoothscroll.polyfill();
 
@@ -16,10 +17,13 @@ smoothscroll.polyfill();
 export const GlobalContext = createContext();
 export const UserContext = createContext();
 
+localStorage.setItem("cart", JSON.stringify({}));
 export default function App() {
-    const [cart, updateCart] = useState({});
+    // const [cart, updateCart] = useLocalStorage("cart");
+    const [cart, updateCart] = useState([]);
     const [currentUser, setCurrentUser] = useState();
-    const [userType, setUserType] = useState("")
+    const [userType, setUserType] = useState("");
+    const [products, setProducts] = useState([]);
     
     const loginFunc = useCallback(
         (user) => {
@@ -37,23 +41,28 @@ export default function App() {
     }, [currentUser, loginFunc])
     
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => setCurrentUser(user))
-        return unsubscribe
+        const unsubscribeAuth = onAuthStateChanged(auth, user => setCurrentUser(user));
+        
+        const productsQuery = query(collection(firestore, "products"))
+        const unsubscribeProducts = onSnapshot(productsQuery, snapshot => {
+            setProducts(snapshot.docs.map(snap => ({...snap.data(), id:snap.id})))
+        })
+        return () => {
+            unsubscribeAuth();
+            unsubscribeProducts();
+        }
     }, [])
-
-    // currentUser && loginFunc(currentUser)
-    // console.log(cart, "App")
 
     return (
         <UserContext.Provider value={currentUser}>
-            <GlobalContext.Provider value={{cart, updateCart}}>
+            <GlobalContext.Provider value={{cart, updateCart, products}}>
                 <Nav />
                 <Switch>
-                    <Route exact path="/"><Main /></Route>
+                    <Route exact path="/" render={() => <Main />} />
                     <Route path="/user">
                         { currentUser && userType ? <Dashboard userType={userType} /> : <Authentication />}
                     </Route>
-                    <Route path="/cart"><Cart /></Route>
+                    <Route path="/cart" render={() => <Cart />} />
                 </Switch>
             </GlobalContext.Provider >
         </UserContext.Provider>

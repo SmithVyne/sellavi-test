@@ -6,7 +6,6 @@ import {BsBag, BsHeart, BsPerson} from "react-icons/bs";
 import styled from 'styled-components';
 import logo from "../assets/logo.svg";
 import { GlobalContext } from '../components/App';
-import _ from 'lodash';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -189,7 +188,7 @@ export default function Nav() {
                 <div className="shop-utils">
                     <IoDocumentOutline />
                     <BsHeart />
-                    <Link to="/cart"><span className="cart-count">{_.size(cart)}</span><BsBag /></Link>
+                    <Link to="/cart"><span className="cart-count">{cart.length}</span><BsBag /></Link>
                 </div>
             </Step2>
             <Step3>

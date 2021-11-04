@@ -38,14 +38,12 @@ const Wrapper = styled.div`
 
 export default function Cart() {
     const {cart} = useContext(GlobalContext);
-    const products = useMemo(() => Object.values(cart), [cart])
-    const totalPrice = useMemo(() => products.reduce((sum, product) => sum + product.price, 0), [products])
-    // console.log(cart)
-    
+    const totalPrice = useMemo(() => cart.reduce((sum, product) => sum + product.price * product.quantity, 0), [cart])
+        
     return (
         <Wrapper>
             <div className="products">
-                {products.map(product => <Product product={product} cart={true} />)}
+                {cart.map((product, index) => <Product key={product.id} product={product} isCart={true} index={index} />)}
             </div>
             <div className="bottom">
                 <button>Buy Now</button>

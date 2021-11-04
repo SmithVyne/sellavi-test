@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { memo, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import bathroom from "../assets/bathroom.png";
 import bathroom2 from "../assets/bathroom2.png";
@@ -9,8 +9,6 @@ import truck from "../assets/truck.svg";
 import drawing from "../assets/drawing.svg";
 import store from "../assets/store.svg";
 import manager from "../assets/manager.svg";
-import tap1 from "../assets/products/tap.png";
-import sink1 from "../assets/products/sink1.png";
 import Product from '../components/Product';
 import modernBathroom from "../assets/categories/modern-bathroom.png";
 import modernBathroom2 from "../assets/categories/modern-bathroom1.png";
@@ -20,6 +18,8 @@ import feedbackBathroom from "../assets/feedback/bathroom.png";
 import feedbackKitchen from "../assets/feedback/kitchen.png";
 import feedbackLivingRoom from "../assets/feedback/living-room.png";
 import scrollArrow from "../assets/arrow.svg";
+import { GlobalContext } from '../components/App';
+
 
 const Wrapper = styled.main`
     width: 100%;
@@ -58,7 +58,6 @@ const Wrapper = styled.main`
 const Banner = styled.section`
     width: 100%;
     height: fit-content;
-    background: red;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -211,15 +210,9 @@ const Feedback = styled(Categories)`
     }
 `
 
-export const products = [
-    {image: tap1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", rating: [4.9, 15]},
-    {image: sink1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", rating: [5.0, 15], newProd: true},
-    {image: tap1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", },
-    {image: sink1, price: 5200, desc: "Стул Мартин бархатный, ножки тёмные", sale: true},
-]
-
-export default function Main() {
-    const feedbackRef = useRef()
+export default memo(function Main() {
+    const {products} = useContext(GlobalContext);   
+    const feedbackRef = useRef();
     const handleScroll = (direction="left") => {
         const {current} = feedbackRef;
         if(direction === "right") {
@@ -269,7 +262,7 @@ export default function Main() {
             <Hits id="new">
                 <h2>Хиты продаж</h2>
                 <div className="hit-items">
-                    {products.map(product => <Product key={JSON.stringify(product)} product={product} />)}
+                    {products.map((product, index) => <Product key={product.id} product={product} index={index} />)}
                 </div>
             </Hits>
             <Categories>
@@ -332,4 +325,4 @@ export default function Main() {
             </section>
         </Wrapper>
     )
-}
+})
