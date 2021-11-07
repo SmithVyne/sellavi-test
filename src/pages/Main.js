@@ -33,7 +33,7 @@ import brand4 from "../assets/brands/image4.png";
 
 // window.__forceSmoothScrollPolyfill__ = true;
 const Wrapper = styled.main`
-    width: 100vw;
+    width: 100%;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -324,7 +324,7 @@ const Brands = styled(Feedback)`
             align-items: center;
             justify-content: center;
             img {
-                width: 80%
+                max-width: 100%;
             }
         }
     }
