@@ -8,6 +8,7 @@ import { addDoc, collection } from '@firebase/firestore';
 import { firestore } from '../globals/firebase';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Redirect } from 'react-router';
+import { useEscapeKey } from '../hooks';
 
 const Wrapper = styled.div`
     position: relative;
@@ -136,6 +137,7 @@ const CheckoutPopup = ({setShowpopup, products, totalPrice}) => {
     const [loading, setLoading] = useState(false)
     const [redirect, setRedirect] = useState(false)
     const {updateCart} = useContext(GlobalContext);
+    useEscapeKey(setShowpopup);
 
     const handleSubmit = (e) => {
         setLoading(true)

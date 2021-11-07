@@ -9,6 +9,7 @@ import Merchant from './dashboards/Merchant'
 const Wrapper = styled.div`
     user-select: none;
     width: 100%;
+    margin-bottom: 50px;
     section.body {
         width: 100%;
         padding: 0 390px;

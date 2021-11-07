@@ -216,12 +216,14 @@ const Categories = styled.section`
             grid-template-columns: 100%;
         }
         .category {
+            cursor: pointer;
             position: relative;
             img {
                 width: 100%;
             }
             button {
                 position: absolute;
+                cursor: inherit;
                 width: 158px;
                 height: 70px;
                 display: flex;
