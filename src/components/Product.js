@@ -117,12 +117,14 @@ export default memo(function Product({product, isCart=false, dashboard=false}) {
     const previousQuantity = usePrevious(quantity);
     
     useEffect(() => {
-        if (quantity >= 1 && quantity !== previousQuantity){
-            updateCart(cart => ({...cart, [product.id]: {...product, quantity} }))
-        } else if(quantity === 0 && quantity !== previousQuantity && isCart) {
-            deleteItemFromCart()
+        if(!dashboard) {
+            if (quantity >= 1 && quantity !== previousQuantity){
+                updateCart(cart => ({...cart, [product.id]: {...product, quantity} }))
+            } else if(quantity === 0 && quantity !== previousQuantity && isCart) {
+                deleteItemFromCart()
+            }
         }
-    }, [quantity, updateCart, product, previousQuantity, isCart, deleteItemFromCart])
+    }, [quantity, updateCart, product, previousQuantity, isCart, deleteItemFromCart, dashboard])
     
     return (
         <Wrapper image={image ? image : "https://via.placeholder.com/200x200.png/fff?text=placeholder"}>
@@ -138,14 +140,17 @@ export default memo(function Product({product, isCart=false, dashboard=false}) {
                     <span>{Array(5).fill(5).map((_, id) => <AiFillStar key={id} color={id + 1 <= stars ? "#E31E24" : "#A3A4A5" } />)}</span>
                     <span>{rating.stars} ({rating.count})</span>
                 </span>}
-            {quantity >= 1 ? 
-                dashboard || 
+            {dashboard ||
+            <> 
+                {quantity >= 1 ? 
                 <QuantityControl>
                     <span onClick={()=>setQuantity(q => q-1)} className="controls">-</span>
                     {quantity}
                     <span onClick={()=>setQuantity(q => q+1)} className="controls">+</span>
-                </QuantityControl> : dashboard ||
+                </QuantityControl> : 
                 <button onClick={() => setQuantity(1)}>КУПИТЬ</button>}
+            </>
+            }
         </Wrapper>
     )
 })
