@@ -28,11 +28,13 @@ header.innerHTML = `
     </style>
     <div class="step1">
         <span>г. Москва</span>
-        <Link to="/">Сборка и установка</Link>
-        <Link to="/">Доставка и самовывоз</Link>
-        <Link to="/">Пункт выдачи</Link>
-        <Link to="/">Оплата и возврат</Link>
-        <Link to="/user"><BsPerson /></Link>
+        <a href="/сборка-и-установка">Сборка и установка</a>
+        <a href="/доставка-и-самовывоз">Доставка и самовывоз</a>
+        <a href="/пункт-выдачи">Пункт выдачи</a>
+        <a href="/оплата-и-возврат">Оплата и возврат</a>
+        <a href="/user">
+            <img src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-user-interface-kiranshastry-lineal-kiranshastry-1.png"/>
+        </a>
     </div>
 `;
 
