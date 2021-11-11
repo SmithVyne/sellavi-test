@@ -35,3 +35,6 @@ header.innerHTML = `
         <Link to="/user"><BsPerson /></Link>
     </div>
 `;
+
+
+console.log(header)
