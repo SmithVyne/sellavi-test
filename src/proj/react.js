@@ -610,6 +610,38 @@ const getFeedback = () => `
     </div>`
 
 
+const getBrands = () => `
+    <style> 
+        .brands {
+            display: flex;
+            gap: 29px;
+            align-items: center;
+            width: max-content;
+            padding: 5px;
+        }
+        .brand {
+            box-shadow: 2px 3px 9px 0px #83838542;
+            width: 253px;
+            height: 253px;
+            max-width: 88vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brand img {
+            max-width: 100%;
+        }
+    </style>
+    <div class="scrollWrapper">
+        <div class="brands">
+            <span class="brand"><img src="https://cdn.sellavi.com/image/upload/if_w_gt_1000/w_1000,q_100/if_end/v1636533476/ru/clients/121756/75b4f9ac59ffc288943c662eed1b592419c9059d.png" style="width: 173px;"></span>
+            <span class="brand"><img src="https://cdn.sellavi.com/image/upload/if_w_gt_1000/w_1000,q_100/if_end/v1636590592/ru/clients/121756/a1585f785d6df8b9166eebe2f83f59f2f82dd502.png" style="width: 94px;"></span>
+            <span class="brand"><img src="https://cdn.sellavi.com/image/upload/if_w_gt_1000/w_1000,q_100/if_end/v1636590616/ru/clients/121756/3784b738a7957ce7d57f786af492c7558527908c.png" style="width: 146px;"></span>
+            <span class="brand"><img src="https://cdn.sellavi.com/image/upload/if_w_gt_1000/w_1000,q_100/if_end/v1636590627/ru/clients/121756/18604022e28e756de8bff294b8d4e40ab267bc16.png" style="width: 93px;"></span>
+        </div>
+    </div>
+`
+
 const Container = document.querySelector(".content-area");
 Container.innerHTML += `
         <section class="page-section">
@@ -628,7 +660,16 @@ Container.innerHTML += `
         <section class="page-section">
                 ${getFeedback()}
         </section>
+        <section class="page-section">
+            <div class="container feedbackWrapper">
+                <i class="fas fa-chevron-left scroller leftScroll"></i>
+                <i class="fas fa-chevron-right scroller rightScroll"></i>
+                <h2>Бренды</h2>
+                ${getBrands()}
+            </div>
+        </section>
 `
+
 
 const updaters = document.querySelectorAll(".updater")
 updaters.forEach(element => {
