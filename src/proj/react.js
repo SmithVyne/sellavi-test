@@ -1,5 +1,3 @@
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-
 <script>
 $(document).ready(execute)
 function execute () {
@@ -239,85 +237,6 @@ nav.innerHTML = `
 `
 
 
-
-const categories = document.querySelector(".homefeatured_category .container");
-categories.innerHTML += `
-    <style>
-        .homefeatured_category .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            margin-top: 71px;
-        }
-        .homefeatured_category .container h2 {
-            font-size: 28px;
-            font-weight: 600;
-            line-height: 34px;
-            margin: 0 0 30px;
-        }
-        .homefeatured_category .container .categories {
-            display: grid;
-            grid-gap: 20px;
-            grid-template-columns: 50% 50%;
-        }
-        .homefeatured_category .category {
-            cursor: pointer;
-            position: relative;
-        }
-        .homefeatured_category .category img {
-            width: 100%;
-        }
-        .homefeatured_category .category button {
-            position: absolute;
-            cursor: inherit;
-            width: 158px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            top: calc(50% - 35px);
-            left: 0;
-            border: none;
-            color: #fff;
-            background: #2B2A29;
-        }
-        .homefeatured_category .category button:hover {
-            background: #E31E24;
-        }   
-        @media(max-width: 1180px) {
-            .homefeatured_category .container .categories {
-                grid-template-columns: 100%;
-            }
-        }
-    </style>
-
-    <h2>Категории</h2>
-    <div class="categories">
-        <a href="/сантехника" class="category">
-            <button>САНТЕХНИКА ></button>
-            <img alt="modernBathroom" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/489f48335dbd0d97e028c4c1dc1c00d9bca4b021.png" />
-        </a>
-        <a href="/плитка" class="category">
-            <button>ПЛИТКА ></button>
-            <img alt="modernBathroom2" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/6357dd308dcc7d307b875532b0b0dd9b5806d242.png" />
-        </a>
-        <a href="/лепнина" class="category">
-            <button>ЛЕПНИНА ></button>
-            <img alt="corridoor" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/fbbc387e81def555547d94366fa2c22d4a96bb86.png" />
-        </a>
-        <a href="/фреска" class="category">
-            <button>ФРЕСКА ></button>
-            <img alt="livingRoom" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/2e8bb38fe848e2604ea3098ca310e1a3ba0cc277.png" />
-        </a>
-</div>
-`
-
-
-
-
-
-
 const ProductStyles = (current) => `
     <style>
         .productsWrapper.container{
@@ -422,7 +341,7 @@ const ProductStyles = (current) => `
         div.QuantityControl {
             min-width: 200px;
             width: 100%;
-            display: flex;
+            display:  none;
             align-items: center;
             justify-content: space-between;
             height: 51px;
@@ -471,6 +390,226 @@ window.products.reduce((prev, current, index) => prev += `
    )
 }
 
+const cartCount = document.querySelector(".cart-count");
+function updateCart({target}) {
+    const {index, type} = target.dataset;
+    const {name, price, product_id} = window.products[index];
+    let cartIndex = window.cart_products.findIndex(ele => ele.product_id === product_id)
+    if (cartIndex >=0) {
+        type === "add" ? window.cart_products[cartIndex].quantity += 1 : window.cart_products[cartIndex].quantity -= 1
+    } else {
+        window.cart_products.push({name, price, product_id, quantity: 1})
+        cartIndex = window.cart_products.length -1
+    }
+
+    const quantityControl = document.querySelector(`.QuantityControl[data-index="${index}"]`);
+    const button = document.querySelector(`.productWrapper button[data-index="${index}"]`);
+    const quantityElement = document.querySelector(`.QuantityControl[data-index="${index}"] .quantity`);
+    if(window.cart_products[cartIndex].quantity > 0) {
+        button.style.display = "none";
+        quantityControl.style.display = "flex";
+    } else {
+        quantityControl.style.display = "none";
+        button.style.display = "flex";
+        window.cart_products = window.cart_products.filter((_, idx) => idx !== cartIndex)
+    }
+    
+cartCount.textContent = window.cart_products.length;
+  quantityElement.textContent = window.cart_products[cartIndex]?.quantity ? window.cart_products[cartIndex].quantity : 0 ;
+    
+}
+
+const getCategories = () => `
+<style>
+    .categoriesWrapper.container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 71px;
+    }
+    .categoriesWrapper h2 {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 34px;
+        margin: 0 0 30px;
+    }
+    .categoriesWrapper .categories {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: 50% 50%;
+    }
+    .category {
+        cursor: pointer;
+        position: relative;
+    }
+    .category img {
+        width: 100%;
+    }
+    .category button {
+        position: absolute;
+        cursor: inherit;
+        width: 158px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        top: calc(50% - 35px);
+        left: 0;
+        border: none;
+        color: #fff;
+        background: #2B2A29;
+    }
+    .category button:hover {
+        background: #E31E24;
+    }   
+    @media(max-width: 1180px) {
+        .categoriesWrapper .categories {
+            grid-template-columns: 100%;
+        }
+    }
+</style>
+
+<h2>Категории</h2>
+<div class="categories">
+    <a href="/сантехника" class="category">
+        <button>САНТЕХНИКА ></button>
+        <img alt="modernBathroom" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/489f48335dbd0d97e028c4c1dc1c00d9bca4b021.png" />
+    </a>
+    <a href="/плитка" class="category">
+        <button>ПЛИТКА ></button>
+        <img alt="modernBathroom2" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/6357dd308dcc7d307b875532b0b0dd9b5806d242.png" />
+    </a>
+    <a href="/лепнина" class="category">
+        <button>ЛЕПНИНА ></button>
+        <img alt="corridoor" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/fbbc387e81def555547d94366fa2c22d4a96bb86.png" />
+    </a>
+    <a href="/фреска" class="category">
+        <button>ФРЕСКА ></button>
+        <img alt="livingRoom" src="https://cdn.sellavi.com/image/upload/t_media_lib_thumb/ru/clients/121756/2e8bb38fe848e2604ea3098ca310e1a3ba0cc277.png" />
+    </a>
+</div>`
+
+const getFeedback = () => `
+    <style>
+        .feedbackWrapper.container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 71px;
+            position: relative;
+        }
+        .feedbackWrapper h2 {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 34px;
+            margin: 0 0 30px;
+        }
+        .scroller {
+            position: absolute;
+            z-index: 1;
+            cursor: pointer;
+        }
+        .leftScroll {
+            top: 50%;
+            left: -40px;
+        }
+        .rightScroll {
+            top: 50%;
+            right: -40px;
+        }
+        @media(max-width: 720px) {
+            .leftScroll {
+                left: -15px;
+            }
+            .rightScroll {
+                right: -15px;
+            }
+        }
+        .scrollWrapper {
+            width: 100%;
+            overflow-x: scroll;
+        }
+        .scrollWrapper::-webkit-scrollbar{
+            width: 0px;
+        }
+        .feedbacks {
+            display: flex;
+            gap: 45px;
+            align-items: center;
+            width: max-content;
+            padding: 5px;
+        }
+        .feedback {
+            box-shadow: 2px 3px 9px 0px #83838542;
+            width: 350px;
+            max-width: 88vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 36px 40px;
+        }
+        .feedback img {
+            width: 100%;
+            height: 206px;
+        }
+        .feedback .customer-name {
+            margin: 23px 0 6px;
+            color: #E31E24;
+            font-size: 18px;
+        }
+        .feedback .customer-city {
+            color: #4F4F4F;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .feedback .customer-comment {
+            font-size: 16px;
+            font-style: italic;
+            font-weight: 300;
+            line-height: 21px;
+            text-align: left;
+        }
+    </style>
+    <div class="container feedbackWrapper">
+        <i class="fas fa-chevron-left scroller leftScroll"></i>
+        <i class="fas fa-chevron-right scroller rightScroll"></i>
+        <h2>Отзывы</h2>
+        <div class="scrollWrapper">
+        <div class="feedbacks">
+            <div class="feedback">
+                <img alt="feedback" src="" />
+                <span class="customer-name">Снежана</span>
+                <span class="customer-city">Москва</span>
+                <span class="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
+            </div>
+
+            <div class="feedback">
+                <img alt="feedback" src="" />
+                <span class="customer-name">Инна Васильева</span>
+                <span class="customer-city">Екатеринбург</span>
+                <span class="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
+            </div>
+
+            <div class="feedback">
+                <img alt="feedback" src="" />
+                <span class="customer-name">Андрей Семенов</span>
+                <span class="customer-city">Санкт - Петербург</span>
+                <span class="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
+            </div>
+
+            <div class="feedback">
+                <img alt="feedback" src="" />
+                <span class="customer-name">Инна</span>
+                <span class="customer-city">Екатеринбург</span>
+                <span class="customer-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit at nisi vulputate risus tempus luctus risus. Hendrerit in magna purus amet et faucibus mauris posuere neque. Integer viverra sagittis, ligula id tempus, elit consectetur eget. Tortor lectus massa at eros sed aliquet.</span>
+            </div>
+        </div>
+        </div>
+    </div>`
+
+
 const Container = document.querySelector(".content-area");
 Container.innerHTML += `
         <section class="page-section">
@@ -481,32 +620,15 @@ Container.innerHTML += `
                 </div>
             </div>
         </section>
+        <section class="page-section">
+            <div class="categoriesWrapper container">
+                ${getCategories()}
+            </div>
+        </section>
+        <section class="page-section">
+                ${getFeedback()}
+        </section>
 `
-const cartCount = document.querySelector(".cart-count");
-function updateCart({target}) {
-    const {index, type} = target.dataset;
-    const {name, price, product_id} = window.products[index];
-    let cartIndex = window.cart_products.findIndex(ele => ele.id === product_id)
-    if (cartIndex >=0) {
-        type === "add" ? window.cart_products[cartIndex].quantity += 1 : window.cart_products[cartIndex].quantity -= 1
-    } else {
-        window.cart_products.push({name, price, product_id, quantity: 1})
-        cartIndex = window.cart_products.length -1
-    }
-
-    const quantityControl = document.querySelector(`.QuantityControl[data-index="${index}"]`);
-    const button = document.querySelector(`.productWrapper button[data-index="${index}"]`);
-    if(window.cart_products[cartIndex].quantity > 0) {
-        button.style.display = "none";
-        quantityControl.style.display = "flex";
-    } else {
-        quantityControl.style.display = "none";
-        button.style.display = "flex";
-    }
-
-    
-    cartCount.textContent = window.cart_products.length
-}
 
 const updaters = document.querySelectorAll(".updater")
 updaters.forEach(element => {
