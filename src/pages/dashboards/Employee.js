@@ -2,7 +2,7 @@ import { collection, onSnapshot, query } from '@firebase/firestore'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Product from '../../components/Product'
+import ProductClone from '../../components/ProductClone'
 import { firestore } from '../../globals/firebase'
 
 
@@ -55,10 +55,10 @@ export default function Employee() {
                     <div className="title">
                         <div>Customer Name: {order.customerName}</div>
                         <div>Phone number: {order.contactNumber}</div>
-                        <div>Total price: {order.totalPrice} p.</div>
+                        <div>Total price: {order.cart_products.reduce((prev, product) => prev + +product.price * product.order_quantity, 0)} p.</div>
                     </div>
                     <div className="products">
-                        {order.products.map(product => <Product key={product.id} product={product} dashboard={true} />)}
+                        {order.cart_products.map(product => <ProductClone key={product.id} product={product} />)}
                     </div>
                 </Order>)}
         </>
