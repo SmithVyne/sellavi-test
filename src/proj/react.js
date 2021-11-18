@@ -1175,4 +1175,4 @@ else if(pathname === "/cart/") {
 } // End of Execute
 
 
-</script>
+// </script>
